@@ -35,10 +35,10 @@ export class BsTooltipElement extends HTMLElement {
       html: true,
       sanitize: false,
       trigger: this.manual ? 'manual' : 'hover focus',
-      placement: this.placement,
+      placement: this.placement
     })
 
-    const state = { tooltip }
+    const state = {tooltip}
     states.set(this, state)
 
     this.update()
@@ -74,7 +74,7 @@ export class BsTooltipElement extends HTMLElement {
 
   get placement(): Placement {
     const placement = this.getAttribute('placement')
-    return placement && (Placements as readonly string[]).includes(placement) ? placement as Placement : 'top'
+    return placement && (Placements as readonly string[]).includes(placement) ? (placement as Placement) : 'top'
   }
 
   get content(): HTMLElement {
@@ -84,6 +84,7 @@ export class BsTooltipElement extends HTMLElement {
     div.classList.add('text-start')
 
     if (template) {
+      // eslint-disable-next-line github/no-inner-html
       div.innerHTML = template.innerHTML
     } else {
       div.textContent = this.getAttribute('content')
