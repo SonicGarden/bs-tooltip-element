@@ -31,7 +31,7 @@ export class BsTooltipElement extends HTMLElement {
 
   private init() {
     const tooltip = new Tooltip(this, {
-      title: this.content,
+      title: this.contentElement,
       html: true,
       sanitize: false,
       trigger: this.manual ? 'manual' : 'hover focus',
@@ -60,12 +60,36 @@ export class BsTooltipElement extends HTMLElement {
     return this.hasAttribute('manual')
   }
 
+  set manual(value: boolean) {
+    if (value) {
+      this.setAttribute('manual', '')
+    } else {
+      this.removeAttribute('manual')
+    }
+  }
+
   get show(): boolean {
     return this.hasAttribute('show')
   }
 
+  set show(value: boolean) {
+    if (value) {
+      this.setAttribute('show', '')
+    } else {
+      this.removeAttribute('show')
+    }
+  }
+
   get disabled(): boolean {
     return this.hasAttribute('disabled')
+  }
+
+  set disabled(value: boolean) {
+    if (value) {
+      this.setAttribute('disabled', '')
+    } else {
+      this.removeAttribute('disabled')
+    }
   }
 
   get tooltip(): Tooltip | undefined {
@@ -77,7 +101,7 @@ export class BsTooltipElement extends HTMLElement {
     return placement && (Placements as readonly string[]).includes(placement) ? (placement as Placement) : 'top'
   }
 
-  get content(): HTMLElement {
+  get contentElement(): HTMLElement {
     const template = this.querySelector('template')
 
     const div = document.createElement('div')
@@ -91,6 +115,18 @@ export class BsTooltipElement extends HTMLElement {
     }
 
     return div
+  }
+
+  get content(): string | undefined {
+    return this.getAttribute('content') ?? undefined
+  }
+
+  set content(value) {
+    if (value) {
+      this.setAttribute('content', value)
+    } else {
+      this.removeAttribute('content')
+    }
   }
 }
 

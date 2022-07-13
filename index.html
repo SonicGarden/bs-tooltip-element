@@ -45,9 +45,14 @@
           </bs-tooltip>
         </div>
       </div>
+      <div id="vue-app"></div>
     </main>
     <script type="module">
+      import { createApp } from 'vue';
       import './src/bs-tooltip-element.ts'
+      import App from './examples/App.vue'
+
+      createApp(App).mount('#vue-app')
     </script>
   </body>
 </html>

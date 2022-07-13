@@ -9,11 +9,16 @@ export declare class BsTooltipElement extends HTMLElement {
     private init;
     private update;
     get manual(): boolean;
+    set manual(value: boolean);
     get show(): boolean;
+    set show(value: boolean);
     get disabled(): boolean;
+    set disabled(value: boolean);
     get tooltip(): Tooltip | undefined;
     get placement(): Placement;
-    get content(): HTMLElement;
+    get contentElement(): HTMLElement;
+    get content(): string | undefined;
+    set content(value: string | undefined);
 }
 declare global {
     interface Window {
