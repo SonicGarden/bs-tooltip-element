@@ -5,8 +5,12 @@ export declare class BsTooltipElement extends HTMLElement {
     static get observedAttributes(): string[];
     connectedCallback(): void;
     disconnectedCallback(): void;
-    attributeChangedCallback(): void;
+    attributeChangedCallback(name: string): void;
     private init;
+    private refresh;
+    private isShown;
+    private showTooltip;
+    private hideTooltip;
     private update;
     get manual(): boolean;
     set manual(value: boolean);

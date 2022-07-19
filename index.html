@@ -21,7 +21,7 @@
           </bs-tooltip>
         </div>
         <div>
-          <bs-tooltip content="Manual tooltip" manual show>
+          <bs-tooltip content="Manual tooltip" manual show id="manual-tooltip">
             <button type="button" class="btn btn-secondary">Manual Tooltip</button>
           </bs-tooltip>
         </div>
@@ -53,6 +53,10 @@
       import App from './examples/App.vue'
 
       createApp(App).mount('#vue-app')
+
+      setTimeout(() => {
+        document.querySelector('#manual-tooltip').content = 'Manual tooltip changed';
+      }, 3000);
     </script>
   </body>
 </html>

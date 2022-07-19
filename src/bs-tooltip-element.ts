@@ -25,7 +25,12 @@ export class BsTooltipElement extends HTMLElement {
     states.delete(this)
   }
 
-  attributeChangedCallback(): void {
+  attributeChangedCallback(name: string): void {
+    if (name === 'content') {
+      this.refresh()
+      return
+    }
+
     this.update()
   }
 
@@ -44,9 +49,31 @@ export class BsTooltipElement extends HTMLElement {
     this.update()
   }
 
+  private refresh() {
+    this.tooltip?.dispose()
+    this.init()
+  }
+
+  private isShown(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return !!(this.tooltip as any)?._isShown()
+  }
+
+  private showTooltip() {
+    if (this.isShown()) return
+
+    this.tooltip?.show()
+  }
+
+  private hideTooltip() {
+    if (!this.isShown()) return
+
+    this.tooltip?.hide()
+  }
+
   private update() {
     if (this.manual) {
-      this.show ? this.tooltip?.show() : this.tooltip?.hide()
+      this.show ? this.showTooltip() : this.hideTooltip()
     }
 
     if (this.disabled) {

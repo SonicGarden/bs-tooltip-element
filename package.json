@@ -1,6 +1,6 @@
 {
   "name": "@sonicgarden/bs-tooltip-element",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "module": "dist/bs-tooltip-element.es.js",
   "type": "module",
   "types": "types/bs-tooltip-element.d.ts",
@@ -22,13 +22,13 @@
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
     "@popperjs/core": "^2.11.5",
-    "@types/bootstrap": "^5.1.12",
+    "@types/bootstrap": "^5.1.13",
     "@vitejs/plugin-vue": "^2.3.3",
-    "bootstrap": "^5.1.3",
-    "eslint": "^8.14.0",
+    "bootstrap": "^5.2.0",
+    "eslint": "^8.20.0",
     "eslint-plugin-custom-elements": "^0.0.6",
     "eslint-plugin-github": "^4.3.6",
-    "typescript": "^4.2.4",
+    "typescript": "^4.7.4",
     "vite": "^2.9.14",
     "vue": "^3.2.37"
   },
@@ -36,6 +36,6 @@
     "node": "16.16.0"
   },
   "peerDependencies": {
-    "bootstrap": "^5.1.3"
+    "bootstrap": "^5.2.0"
   }
 }
