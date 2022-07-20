@@ -1,7 +1,4 @@
 import Tooltip from 'bootstrap/js/dist/tooltip';
-declare type TooltipWithPrivate = Tooltip & {
-    _isAnimated: () => boolean;
-};
 declare const Placements: readonly ["auto", "top", "bottom", "left", "right"];
 declare type Placement = typeof Placements[number];
 export declare class BsTooltipElement extends HTMLElement {
@@ -21,7 +18,7 @@ export declare class BsTooltipElement extends HTMLElement {
     set show(value: boolean);
     get disabled(): boolean;
     set disabled(value: boolean);
-    get tooltip(): TooltipWithPrivate | undefined;
+    get tooltip(): Tooltip | undefined;
     get placement(): Placement;
     get contentElement(): HTMLElement;
     get content(): string | undefined;

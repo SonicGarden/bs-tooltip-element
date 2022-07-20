@@ -1,15 +1,5 @@
 import Tooltip from 'bootstrap/js/dist/tooltip'
 
-type TooltipWithPrivate = Tooltip & {
-  _isAnimated: () => boolean
-}
-
-type State = {
-  tooltip: TooltipWithPrivate
-}
-
-const states = new WeakMap<BsTooltipElement, State>()
-
 const Placements = ['auto', 'top', 'bottom', 'left', 'right'] as const
 
 type Placement = typeof Placements[number]
@@ -27,13 +17,12 @@ export class BsTooltipElement extends HTMLElement {
   disconnectedCallback() {
     this.hideTooltip()
 
-    if (this.tooltip?._isAnimated()) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((this.tooltip as any)?._config && (this.tooltip as any)?._isAnimated()) {
       // NOTE: wait for animation to finish
       window.setTimeout(() => this.tooltip?.dispose(), 100)
-      states.delete(this)
     } else {
       this.tooltip?.dispose()
-      states.delete(this)
     }
   }
 
@@ -47,21 +36,19 @@ export class BsTooltipElement extends HTMLElement {
   }
 
   private init() {
-    const tooltip = new Tooltip(this, {
+    new Tooltip(this, {
       title: this.contentElement,
       html: true,
       sanitize: false,
       trigger: this.manual ? 'manual' : 'hover focus',
       placement: this.placement
-    }) as TooltipWithPrivate
-
-    const state = {tooltip}
-    states.set(this, state)
-
+    })
     this.update()
   }
 
   private refresh() {
+    if (!this.tooltip) return
+
     this.tooltip?.dispose()
     this.init()
   }
@@ -131,8 +118,8 @@ export class BsTooltipElement extends HTMLElement {
     }
   }
 
-  get tooltip(): TooltipWithPrivate | undefined {
-    return states.get(this)?.tooltip
+  get tooltip(): Tooltip | undefined {
+    return Tooltip.getInstance(this) ?? undefined
   }
 
   get placement(): Placement {
