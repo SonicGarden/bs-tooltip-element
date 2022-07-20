@@ -1,7 +1,11 @@
 import Tooltip from 'bootstrap/js/dist/tooltip'
 
+type TooltipWithPrivate = Tooltip & {
+  _isAnimated: () => boolean
+}
+
 type State = {
-  tooltip: Tooltip
+  tooltip: TooltipWithPrivate
 }
 
 const states = new WeakMap<BsTooltipElement, State>()
@@ -21,8 +25,16 @@ export class BsTooltipElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.tooltip?.dispose()
-    states.delete(this)
+    this.hideTooltip()
+
+    if (this.tooltip?._isAnimated()) {
+      // NOTE: wait for animation to finish
+      window.setTimeout(() => this.tooltip?.dispose(), 100)
+      states.delete(this)
+    } else {
+      this.tooltip?.dispose()
+      states.delete(this)
+    }
   }
 
   attributeChangedCallback(name: string): void {
@@ -41,7 +53,7 @@ export class BsTooltipElement extends HTMLElement {
       sanitize: false,
       trigger: this.manual ? 'manual' : 'hover focus',
       placement: this.placement
-    })
+    }) as TooltipWithPrivate
 
     const state = {tooltip}
     states.set(this, state)
@@ -119,7 +131,7 @@ export class BsTooltipElement extends HTMLElement {
     }
   }
 
-  get tooltip(): Tooltip | undefined {
+  get tooltip(): TooltipWithPrivate | undefined {
     return states.get(this)?.tooltip
   }
 
