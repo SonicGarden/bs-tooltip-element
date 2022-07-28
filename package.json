@@ -1,6 +1,6 @@
 {
   "name": "@sonicgarden/bs-tooltip-element",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "module": "dist/bs-tooltip-element.es.js",
   "type": "module",
   "types": "types/bs-tooltip-element.d.ts",
