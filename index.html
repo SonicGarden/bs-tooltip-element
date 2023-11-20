@@ -1,71 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width user-scalable=no initial-scale=1.0 minimum-scale=1.0 maximum-scale=1.0">
-    <title>bs-tooltip-element demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  </head>
-  <body>
-    <main class="container py-4 vstack gap-4">
-      <h1>&lt;bs-tooltip&gt; element</h1>
-      <div class="vstack gap-3">
-        <div>
-          <bs-tooltip content="Default tooltip">
-            <button type="button" class="btn btn-secondary">Default Tooltip</button>
-          </bs-tooltip>
-        </div>
-        <div>
-          <bs-tooltip content="Multiline content.Multiline content.Multiline content.Multiline content.Multiline content.Multiline content.">
-            <button type="button" class="btn btn-secondary">Multiline content.</button>
-          </bs-tooltip>
-        </div>
-        <div>
-          <bs-tooltip content="Manual tooltip" manual show id="manual-tooltip">
-            <button type="button" class="btn btn-secondary">Manual Tooltip</button>
-          </bs-tooltip>
-        </div>
-        <div>
-          <bs-tooltip content="Disabled tooltip" disabled>
-            <button type="button" class="btn btn-secondary">Disabled Tooltip</button>
-          </bs-tooltip>
-        </div>
-        <div>
-          <bs-tooltip>
-            <button type="button" class="btn btn-secondary">HTML Tooltip</button>
-            <template>
-              This is a <strong>tooltip.</strong><br>
-              This is a <strong>tooltip.</strong>
-            </template>
-          </bs-tooltip>
-        </div>
-        <div>
-          <bs-tooltip content="Bottom tooltip" placement="bottom">
-            <button type="button" class="btn btn-secondary">Bottom Tooltip</button>
-          </bs-tooltip>
-        </div>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width user-scalable=no initial-scale=1.0 minimum-scale=1.0 maximum-scale=1.0">
+  <title>bs-tooltip-element demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+  <main class="container py-4 vstack gap-4">
+    <h1>&lt;bs-tooltip&gt; element</h1>
+    <div class="vstack gap-3">
+      <div>
+        <bs-tooltip content="Default tooltip">
+          <button type="button" class="btn btn-secondary">Default Tooltip</button>
+        </bs-tooltip>
       </div>
-      <div id="vue-app"></div>
-    </main>
-    <script type="module">
-      import { createApp } from 'vue';
-      import './src/bs-tooltip-element.ts'
-      import App from './examples/App.vue'
+      <div>
+        <bs-tooltip
+          content="Multiline content.Multiline content.Multiline content.Multiline content.Multiline content.Multiline content.">
+          <button type="button" class="btn btn-secondary">Multiline content.</button>
+        </bs-tooltip>
+      </div>
+      <div>
+        <bs-tooltip content="Manual tooltip" manual show id="manual-tooltip">
+          <button type="button" class="btn btn-secondary">Manual Tooltip</button>
+        </bs-tooltip>
+      </div>
+      <div>
+        <bs-tooltip content="Disabled tooltip" disabled>
+          <button type="button" class="btn btn-secondary">Disabled Tooltip</button>
+        </bs-tooltip>
+      </div>
+      <div>
+        <bs-tooltip content="tooltip">
+          <button type="button" class="btn btn-secondary" id="disabled-button">Button Disabled Tooltip</button>
+        </bs-tooltip>
+      </div>
+      <div>
+        <bs-tooltip>
+          <button type="button" class="btn btn-secondary">HTML Tooltip</button>
+          <template>
+            This is a <strong>tooltip.</strong><br>
+            This is a <strong>tooltip.</strong>
+          </template>
+        </bs-tooltip>
+      </div>
+      <div>
+        <bs-tooltip content="Bottom tooltip" placement="bottom">
+          <button type="button" class="btn btn-secondary">Bottom Tooltip</button>
+        </bs-tooltip>
+      </div>
+    </div>
+    <div id="vue-app"></div>
+  </main>
+  <script type="module">
+    import { createApp } from 'vue';
+    import './src/bs-tooltip-element.ts'
+    import App from './examples/App.vue'
 
-      createApp(App).mount('#vue-app')
+    createApp(App).mount('#vue-app')
 
-      let count = 0
+    let count = 0
 
-      const timer = setInterval(() => {
-        count++
-        if (count > 5) {
-          clearInterval(timer)
-          document.querySelector('#manual-tooltip').show = false
-          return
-        }
+    const timer = setInterval(() => {
+      count++
+      if (count > 5) {
+        clearInterval(timer)
+        document.querySelector('#manual-tooltip').show = false
+        return
+      }
 
-        document.querySelector('#manual-tooltip').content = `Manual tooltip changed ${count}`;
-      }, 500);
-    </script>
-  </body>
+      document.querySelector('#manual-tooltip').content = `Manual tooltip changed ${count}`;
+    }, 500);
+
+    document.querySelector('#disabled-button').addEventListener('click', (event) => {
+      event.currentTarget.disabled = true
+    })
+  </script>
+</body>
+
 </html>

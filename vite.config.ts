@@ -6,19 +6,19 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/bs-tooltip-element.ts',
-      formats: ['es']
+      formats: ['es'],
     },
     rollupOptions: {
-      external: /^bootstrap/
-    }
+      external: /^bootstrap/,
+    },
   },
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: tag => ['bs-tooltip'].includes(tag)
-        }
-      }
-    })
-  ]
+          isCustomElement: tag => ['bs-tooltip'].includes(tag),
+        },
+      },
+    }),
+  ],
 })

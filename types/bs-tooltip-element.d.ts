@@ -1,12 +1,12 @@
 import Tooltip from 'bootstrap/js/dist/tooltip';
 declare const Placements: readonly ["auto", "top", "bottom", "left", "right"];
-declare type Placement = typeof Placements[number];
+type Placement = (typeof Placements)[number];
 export declare class BsTooltipElement extends HTMLElement {
     static get observedAttributes(): string[];
     connectedCallback(): void;
     disconnectedCallback(): void;
     attributeChangedCallback(name: string): void;
-    private init;
+    private initTooltip;
     private refresh;
     private isShown;
     private showTooltip;
