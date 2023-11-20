@@ -2,7 +2,12 @@ import Tooltip from 'bootstrap/js/dist/tooltip'
 
 const Placements = ['auto', 'top', 'bottom', 'left', 'right'] as const
 
-type Placement = typeof Placements[number]
+type Placement = (typeof Placements)[number]
+
+type State = {
+  observer?: MutationObserver
+}
+const states = new WeakMap<BsTooltipElement, State>()
 
 export class BsTooltipElement extends HTMLElement {
   static get observedAttributes() {
@@ -11,7 +16,23 @@ export class BsTooltipElement extends HTMLElement {
 
   connectedCallback() {
     this.style.display = 'inline-block'
-    window.setTimeout(() => this.init(), 0)
+    window.setTimeout(() => this.initTooltip(), 0)
+
+    // NOTE: firefox doesn't blur the element when it's disabled
+    const observer = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'disabled' &&
+          mutation.target instanceof HTMLElement
+        ) {
+          mutation.target.dispatchEvent(new FocusEvent('focusout', {bubbles: true}))
+        }
+      }
+    })
+
+    observer.observe(this, {attributes: true, subtree: true})
+    states.set(this, {observer})
   }
 
   disconnectedCallback() {
@@ -24,6 +45,8 @@ export class BsTooltipElement extends HTMLElement {
     } else {
       this.tooltip?.dispose()
     }
+
+    states.get(this)?.observer?.disconnect()
   }
 
   attributeChangedCallback(name: string): void {
@@ -35,13 +58,13 @@ export class BsTooltipElement extends HTMLElement {
     this.update()
   }
 
-  private init() {
+  private initTooltip() {
     new Tooltip(this, {
       title: this.contentElement,
       html: true,
       sanitize: false,
       trigger: this.manual ? 'manual' : 'hover focus',
-      placement: this.placement
+      placement: this.placement,
     })
     this.update()
   }
@@ -50,7 +73,7 @@ export class BsTooltipElement extends HTMLElement {
     if (!this.tooltip) return
 
     this.tooltip?.dispose()
-    this.init()
+    this.initTooltip()
   }
 
   private isShown(): boolean {
