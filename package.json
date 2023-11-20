@@ -22,15 +22,15 @@
   "devDependencies": {
     "@github/prettier-config": "0.0.6",
     "@popperjs/core": "^2.11.8",
-    "@types/bootstrap": "^5.2.8",
-    "@vitejs/plugin-vue": "^4.4.0",
+    "@types/bootstrap": "^5.2.9",
+    "@vitejs/plugin-vue": "^4.5.0",
     "bootstrap": "^5.3.2",
-    "eslint": "^8.52.0",
+    "eslint": "^8.54.0",
     "eslint-plugin-custom-elements": "^0.0.8",
     "eslint-plugin-github": "^4.10.1",
     "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vue": "^3.3.6"
+    "vite": "^5.0.0",
+    "vue": "^3.3.8"
   },
   "volta": {
     "node": "16.16.0"
