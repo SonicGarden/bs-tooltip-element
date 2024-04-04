@@ -33,7 +33,7 @@
     "vue": "^3.4.21"
   },
   "volta": {
-    "node": "16.16.0"
+    "node": "20.12.1"
   },
   "peerDependencies": {
     "bootstrap": "^5.3.0"
