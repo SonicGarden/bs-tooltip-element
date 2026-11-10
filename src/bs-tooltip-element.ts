@@ -95,7 +95,11 @@ export class BsTooltipElement extends HTMLElement {
 
   private update() {
     if (this.manual) {
-      this.show ? this.showTooltip() : this.hideTooltip()
+      if (this.show) {
+        this.showTooltip()
+      } else {
+        this.hideTooltip()
+      }
     }
 
     if (this.disabled) {
