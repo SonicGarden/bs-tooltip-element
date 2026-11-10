@@ -41,7 +41,11 @@ export class BsTooltipElement extends HTMLElement {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((this.tooltip as any)?._config && (this.tooltip as any)?._isAnimated()) {
       // NOTE: wait for animation to finish
-      window.setTimeout(() => this.tooltip?.dispose(), 500)
+      window.setTimeout(() => {
+        if (this.isConnected) return
+
+        this.tooltip?.dispose()
+      }, 500)
     } else {
       this.tooltip?.dispose()
     }
@@ -59,6 +63,11 @@ export class BsTooltipElement extends HTMLElement {
   }
 
   private initTooltip() {
+    if (this.tooltip) {
+      this.update()
+      return
+    }
+
     new Tooltip(this, {
       title: this.contentElement,
       html: true,
@@ -95,7 +104,11 @@ export class BsTooltipElement extends HTMLElement {
 
   private update() {
     if (this.manual) {
-      this.show ? this.showTooltip() : this.hideTooltip()
+      if (this.show) {
+        this.showTooltip()
+      } else {
+        this.hideTooltip()
+      }
     }
 
     if (this.disabled) {
