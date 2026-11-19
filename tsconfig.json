@@ -7,9 +7,10 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"outDir": "./types",
+		"rootDir": "./src",
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"allowSyntheticDefaultImports": true
 	},
 	"include": ["src/**/*.ts"]
