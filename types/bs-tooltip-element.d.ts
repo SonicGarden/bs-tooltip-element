@@ -1,4 +1,4 @@
-import Tooltip from 'bootstrap/js/dist/tooltip';
+import Tooltip from "bootstrap/js/dist/tooltip";
 declare const Placements: readonly ["auto", "top", "bottom", "left", "right"];
 type Placement = (typeof Placements)[number];
 export declare class BsTooltipElement extends HTMLElement {
