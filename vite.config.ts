@@ -1,4 +1,3 @@
-import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
@@ -12,13 +11,4 @@ export default defineConfig({
 			external: /^bootstrap/,
 		},
 	},
-	plugins: [
-		vue({
-			template: {
-				compilerOptions: {
-					isCustomElement: (tag) => ["bs-tooltip"].includes(tag),
-				},
-			},
-		}),
-	],
 });
