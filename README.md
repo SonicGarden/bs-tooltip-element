@@ -9,7 +9,7 @@ $ npm install @sonicgarden/bs-tooltip-element
 ## Usage
 
 ```js
-import '@sonicgarden/bs-tooltip-element'
+import "@sonicgarden/bs-tooltip-element";
 ```
 
 ### Default

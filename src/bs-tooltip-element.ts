@@ -1,204 +1,211 @@
-import Tooltip from 'bootstrap/js/dist/tooltip'
+import Tooltip from "bootstrap/js/dist/tooltip";
 
-const Placements = ['auto', 'top', 'bottom', 'left', 'right'] as const
+const Placements = ["auto", "top", "bottom", "left", "right"] as const;
 
-type Placement = (typeof Placements)[number]
+type Placement = (typeof Placements)[number];
 
 type State = {
-  observer?: MutationObserver
-}
-const states = new WeakMap<BsTooltipElement, State>()
+	observer?: MutationObserver;
+};
+const states = new WeakMap<BsTooltipElement, State>();
 
 export class BsTooltipElement extends HTMLElement {
-  static get observedAttributes() {
-    return ['content', 'disabled', 'show']
-  }
+	static get observedAttributes() {
+		return ["content", "disabled", "show"];
+	}
 
-  connectedCallback() {
-    this.style.display = 'inline-block'
-    window.setTimeout(() => this.initTooltip(), 0)
+	connectedCallback() {
+		this.style.display = "inline-block";
+		window.setTimeout(() => this.initTooltip(), 0);
 
-    // NOTE: firefox doesn't blur the element when it's disabled
-    const observer = new MutationObserver(mutations => {
-      for (const mutation of mutations) {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'disabled' &&
-          mutation.target instanceof HTMLElement
-        ) {
-          mutation.target.dispatchEvent(new FocusEvent('focusout', {bubbles: true}))
-        }
-      }
-    })
+		// NOTE: firefox doesn't blur the element when it's disabled
+		const observer = new MutationObserver((mutations) => {
+			for (const mutation of mutations) {
+				if (
+					mutation.type === "attributes" &&
+					mutation.attributeName === "disabled" &&
+					mutation.target instanceof HTMLElement
+				) {
+					mutation.target.dispatchEvent(
+						new FocusEvent("focusout", { bubbles: true }),
+					);
+				}
+			}
+		});
 
-    observer.observe(this, {attributes: true, subtree: true})
-    states.set(this, {observer})
-  }
+		observer.observe(this, { attributes: true, subtree: true });
+		states.set(this, { observer });
+	}
 
-  disconnectedCallback() {
-    this.hideTooltip()
+	disconnectedCallback() {
+		this.hideTooltip();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.tooltip as any)?._config && (this.tooltip as any)?._isAnimated()) {
-      // NOTE: wait for animation to finish
-      window.setTimeout(() => {
-        if (this.isConnected) return
+		if (
+			// biome-ignore lint/suspicious/noExplicitAny: Bootstrap の private API にアクセスするため
+			(this.tooltip as any)?._config &&
+			// biome-ignore lint/suspicious/noExplicitAny: Bootstrap の private API にアクセスするため
+			(this.tooltip as any)?._isAnimated()
+		) {
+			// NOTE: wait for animation to finish
+			window.setTimeout(() => {
+				if (this.isConnected) return;
 
-        this.tooltip?.dispose()
-      }, 500)
-    } else {
-      this.tooltip?.dispose()
-    }
+				this.tooltip?.dispose();
+			}, 500);
+		} else {
+			this.tooltip?.dispose();
+		}
 
-    states.get(this)?.observer?.disconnect()
-  }
+		states.get(this)?.observer?.disconnect();
+	}
 
-  attributeChangedCallback(name: string): void {
-    if (name === 'content') {
-      this.refresh()
-      return
-    }
+	attributeChangedCallback(name: string): void {
+		if (name === "content") {
+			this.refresh();
+			return;
+		}
 
-    this.update()
-  }
+		this.update();
+	}
 
-  private initTooltip() {
-    if (this.tooltip) {
-      this.update()
-      return
-    }
+	private initTooltip() {
+		if (this.tooltip) {
+			this.update();
+			return;
+		}
 
-    new Tooltip(this, {
-      title: this.contentElement,
-      html: true,
-      sanitize: false,
-      trigger: this.manual ? 'manual' : 'hover focus',
-      placement: this.placement,
-    })
-    this.update()
-  }
+		new Tooltip(this, {
+			title: this.contentElement,
+			html: true,
+			sanitize: false,
+			trigger: this.manual ? "manual" : "hover focus",
+			placement: this.placement,
+		});
+		this.update();
+	}
 
-  private refresh() {
-    if (!this.tooltip) return
+	private refresh() {
+		if (!this.tooltip) return;
 
-    this.tooltip?.dispose()
-    this.initTooltip()
-  }
+		this.tooltip?.dispose();
+		this.initTooltip();
+	}
 
-  private isShown(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return !!(this.tooltip as any)?._isShown()
-  }
+	private isShown(): boolean {
+		// biome-ignore lint/suspicious/noExplicitAny: Bootstrap の private API にアクセスするため
+		return !!(this.tooltip as any)?._isShown();
+	}
 
-  private showTooltip() {
-    if (this.isShown()) return
+	private showTooltip() {
+		if (this.isShown()) return;
 
-    this.tooltip?.show()
-  }
+		this.tooltip?.show();
+	}
 
-  private hideTooltip() {
-    if (!this.isShown()) return
+	private hideTooltip() {
+		if (!this.isShown()) return;
 
-    this.tooltip?.hide()
-  }
+		this.tooltip?.hide();
+	}
 
-  private update() {
-    if (this.manual) {
-      if (this.show) {
-        this.showTooltip()
-      } else {
-        this.hideTooltip()
-      }
-    }
+	private update() {
+		if (this.manual) {
+			if (this.show) {
+				this.showTooltip();
+			} else {
+				this.hideTooltip();
+			}
+		}
 
-    if (this.disabled) {
-      this.tooltip?.disable()
-    } else {
-      this.tooltip?.enable()
-    }
-  }
+		if (this.disabled) {
+			this.tooltip?.disable();
+		} else {
+			this.tooltip?.enable();
+		}
+	}
 
-  get manual(): boolean {
-    return this.hasAttribute('manual')
-  }
+	get manual(): boolean {
+		return this.hasAttribute("manual");
+	}
 
-  set manual(value: boolean) {
-    if (value) {
-      this.setAttribute('manual', '')
-    } else {
-      this.removeAttribute('manual')
-    }
-  }
+	set manual(value: boolean) {
+		if (value) {
+			this.setAttribute("manual", "");
+		} else {
+			this.removeAttribute("manual");
+		}
+	}
 
-  get show(): boolean {
-    return this.hasAttribute('show')
-  }
+	get show(): boolean {
+		return this.hasAttribute("show");
+	}
 
-  set show(value: boolean) {
-    if (value) {
-      this.setAttribute('show', '')
-    } else {
-      this.removeAttribute('show')
-    }
-  }
+	set show(value: boolean) {
+		if (value) {
+			this.setAttribute("show", "");
+		} else {
+			this.removeAttribute("show");
+		}
+	}
 
-  get disabled(): boolean {
-    return this.hasAttribute('disabled')
-  }
+	get disabled(): boolean {
+		return this.hasAttribute("disabled");
+	}
 
-  set disabled(value: boolean) {
-    if (value) {
-      this.setAttribute('disabled', '')
-    } else {
-      this.removeAttribute('disabled')
-    }
-  }
+	set disabled(value: boolean) {
+		if (value) {
+			this.setAttribute("disabled", "");
+		} else {
+			this.removeAttribute("disabled");
+		}
+	}
 
-  get tooltip(): Tooltip | undefined {
-    return Tooltip.getInstance(this) ?? undefined
-  }
+	get tooltip(): Tooltip | undefined {
+		return Tooltip.getInstance(this) ?? undefined;
+	}
 
-  get placement(): Placement {
-    const placement = this.getAttribute('placement')
-    return placement && (Placements as readonly string[]).includes(placement) ? (placement as Placement) : 'top'
-  }
+	get placement(): Placement {
+		const placement = this.getAttribute("placement");
+		return placement && (Placements as readonly string[]).includes(placement)
+			? (placement as Placement)
+			: "top";
+	}
 
-  get contentElement(): HTMLElement {
-    const template = this.querySelector('template')
+	get contentElement(): HTMLElement {
+		const template = this.querySelector("template");
 
-    const div = document.createElement('div')
-    div.classList.add('text-start')
+		const div = document.createElement("div");
+		div.classList.add("text-start");
 
-    if (template) {
-      // eslint-disable-next-line github/no-inner-html
-      div.innerHTML = template.innerHTML
-    } else {
-      div.textContent = this.getAttribute('content')
-    }
+		if (template) {
+			div.innerHTML = template.innerHTML;
+		} else {
+			div.textContent = this.getAttribute("content");
+		}
 
-    return div
-  }
+		return div;
+	}
 
-  get content(): string | undefined {
-    return this.getAttribute('content') ?? undefined
-  }
+	get content(): string | undefined {
+		return this.getAttribute("content") ?? undefined;
+	}
 
-  set content(value) {
-    if (value) {
-      this.setAttribute('content', value)
-    } else {
-      this.removeAttribute('content')
-    }
-  }
+	set content(value) {
+		if (value) {
+			this.setAttribute("content", value);
+		} else {
+			this.removeAttribute("content");
+		}
+	}
 }
 
 declare global {
-  interface Window {
-    BsTooltipElement: typeof BsTooltipElement
-  }
+	interface Window {
+		BsTooltipElement: typeof BsTooltipElement;
+	}
 }
 
-if (!window.customElements.get('bs-tooltip')) {
-  window.BsTooltipElement = BsTooltipElement
-  window.customElements.define('bs-tooltip', BsTooltipElement)
+if (!window.customElements.get("bs-tooltip")) {
+	window.BsTooltipElement = BsTooltipElement;
+	window.customElements.define("bs-tooltip", BsTooltipElement);
 }
