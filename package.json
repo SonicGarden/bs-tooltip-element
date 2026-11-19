@@ -1,6 +1,6 @@
 {
   "name": "@sonicgarden/bs-tooltip-element",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "module": "dist/bs-tooltip-element.js",
   "type": "module",
   "types": "types/bs-tooltip-element.d.ts",
@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist && rm -rf types",
-    "lint": "eslint . --ext .ts,.js",
+    "lint": "eslint .",
     "prebuild": "npm run clean && npm run lint && mkdir dist",
     "build": "tsc &&  vite build",
     "dev": "vite --open",
@@ -20,14 +20,15 @@
   },
   "prettier": "@github/prettier-config",
   "devDependencies": {
+    "@eslint/compat": "^1.4.1",
     "@github/prettier-config": "0.0.6",
     "@popperjs/core": "^2.11.8",
     "@types/bootstrap": "^5.2.10",
     "@vitejs/plugin-vue": "^5.0.4",
     "bootstrap": "^5.3.3",
-    "eslint": "^8.57.0",
+    "eslint": "^9.39.5",
     "eslint-plugin-custom-elements": "^0.0.8",
-    "eslint-plugin-github": "^4.10.2",
+    "eslint-plugin-github": "^6.1.2",
     "typescript": "^5.4.3",
     "vite": "^5.2.8",
     "vue": "^3.4.21"
